@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.BoxLayout;
 
 public class ManagerMainDashboard extends Frame implements ActionListener {
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7;
@@ -303,6 +304,53 @@ class DisplayStudentPanel extends Panel {
         headerPanel.add(fee);
         this.add(headerPanel, BorderLayout.NORTH);
 
+        // data panel , here all the data of the students will appear
+        Panel dataContainer = new Panel();
+        dataContainer.setLayout(new BoxLayout(dataContainer, BoxLayout.Y_AXIS));
+        // ScrolPane for more data
+        ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+        scrollPane.add(dataContainer);
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", "16790", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", "16340", 1));
+
+    }
+
+    // Helper method: Creates ONE row panel for a student
+    private Panel createStudentRow(String id, String name, String father, String fee, int rowIndex) {
+
+        // Create a panel for this row
+        Panel row = new Panel();
+
+        // Use GridLayout(1, 4) to match the header's 4 columns
+        row.setLayout(new GridLayout(1, 4));
+
+        // Create labels for each piece of data (centered)
+        Label lblId = new Label(id, Label.CENTER);
+        Label lblName = new Label(name, Label.CENTER);
+        Label lblFather = new Label(father, Label.CENTER);
+        Label lblFee = new Label(fee, Label.CENTER);
+
+        // Set the same font as header for consistency
+        Font font = new Font("SansSerif", Font.CENTER_BASELINE, 14);
+        lblId.setFont(font);
+        lblName.setFont(font);
+        lblFather.setFont(font);
+        lblFee.setFont(font);
+
+        // Add labels to the row
+        row.add(lblId);
+        row.add(lblName);
+        row.add(lblFather);
+        row.add(lblFee);
+        // for good visuality
+        if (rowIndex % 2 == 0) {
+            row.setBackground(Color.GREEN);
+        } else {
+            row.setBackground(new Color(245, 245, 245)); // Very light gray
+        }
+        return row;
     }
 }
 
