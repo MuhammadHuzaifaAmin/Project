@@ -4,6 +4,7 @@ package Project;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.BoxLayout;
+import Project.Room;
 
 public class ManagerMainDashboard extends Frame implements ActionListener {
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7;
@@ -204,11 +205,28 @@ class AddRoomPanel extends Panel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addBtn) {
-            // String room = roomNo.getText();
-            // String cap = capacity.getText();
-            l1.setText("Room added successfully");
-            roomNo.setText(" ");
-            capacity.setText(" ");
+            String roomText = roomNo.getText();
+            String capText = capacity.getText();
+            Room room = new Room();
+
+       // Convert to integers
+       try {
+           int roomNumber = Integer.parseInt(roomText.trim());
+           int capacityValue = Integer.parseInt(capText.trim());
+           if (roomNumber <= 0 || capacityValue <= 0) {
+               l1.setText("Please enter room number or  capacity");
+               return;
+           }
+           room.addRoom(roomNumber, capacityValue);
+           l1.setText("Room added successfully");
+           roomNo.setText("Room added successfully");
+           capacity.setText(" ");
+       }
+       catch (NumberFormatException ex) {
+           System.out.println("Please enter Valid Integers");
+
+       }
+
         }
     }
 }
