@@ -1,0 +1,122 @@
+package Project;
+import java.awt.event.ActionEvent;
+import java.sql.Statement;
+import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import Project.ManagerMainDashboard;
+public class Room {
+   private ArrayList<Integer> roomNumber = new ArrayList<>();
+    private ArrayList<Integer> roomCapacity = new ArrayList<>();
+    private static String hostelName = "A-Hostel";
+    private static int issuedRooms = 0;
+    private static int availableRooms = 10;
+    private static int totalRooms = 10;
+    private static ArrayList<Boolean> status = new ArrayList<>();
+    private static ArrayList<Integer> allotedRoom =  new ArrayList<>();
+    private int issuedRoomNumber;
+    public Room(){
+     roomNumber.add(100);
+     roomNumber.add(101);
+     roomNumber.add(102);
+     roomNumber.add(103);
+     roomNumber.add(104);
+     roomNumber.add(105);
+     roomNumber.add(106);
+     roomNumber.add(107);
+     roomNumber.add(108);
+     roomNumber.add(109);
+     roomCapacity.add(2);
+     roomCapacity.add(1);
+     roomCapacity.add(3);
+     roomCapacity.add(2);
+     roomCapacity.add(4);
+     roomCapacity.add(5);
+     roomCapacity.add(6);
+     roomCapacity.add(2);
+     roomCapacity.add(3);
+     roomCapacity.add(3);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     allotedRoom.add(0);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+     status.add(false);
+
+    }
+   public void addRoom(int roomnumber,int roomcapacity){
+        if(roomnumber > 0 || roomcapacity > 0) {
+            this.roomNumber.add(roomnumber);
+            this.roomCapacity.add(roomcapacity);
+            allotedRoom.add(0);
+            totalRooms += 1;
+            availableRooms += 1;
+
+            String url = "JDBC:sqlite:A:/Java/Practice/src/Practice/Room.db";
+
+            try(Connection conn = DriverManager.getConnection(url);
+                Statement stmt = conn.createStatement()){
+                String sql = "INSERT INTO Room(RoomNumber, RoomCapacity, AllotedCapacity) " +
+                        "VALUES (" + roomnumber + ", " + roomcapacity + ", 0)";
+                stmt.executeUpdate(sql);
+
+                stmt.executeUpdate(sql);
+
+
+            }catch(SQLException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+
+        }
+        else{
+            System.out.println("Room number or Room capacity are empty");
+        }
+
+    }
+ public void allocateRoom(){
+     for(int i = 0;i < totalRooms; i++){
+       if (!status.get(i)){
+           issuedRoomNumber = roomNumber.get(i);
+           updateAllocateRoom(i);
+           updateStatus(i);
+           issuedRooms++;
+           availableRooms--;
+          // l4.setText("Room allocated successfully");
+           return;
+       }
+
+       }
+    // l4.setText("Rooms not Available");
+
+
+ }
+
+    private void updateAllocateRoom(int index){
+        int temp = allotedRoom.get(index);
+        temp++;
+        allotedRoom.set(index, temp);
+    }
+    private void updateStatus(int index){
+        if(allotedRoom.get(index).equals(roomCapacity.get(index))){
+                status.set(index, true);
+            }
+        }
+
+ }
+
+
