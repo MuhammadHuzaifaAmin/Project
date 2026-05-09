@@ -14,12 +14,12 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         this.setBackground(Color.BLUE);
         this.setTitle("Manager Main Dashboard");
         this.setLayout(new BorderLayout());
-        // side bar
+        // sidebar
         sidebar = new Panel();
         sidebar.setLayout(new GridLayout(1, 7, 10, 10));
         Font font = new Font("Sansarif", Font.ROMAN_BASELINE, 16);
         // Buttons and its design
-        btn1 = new Button("Add Room");
+        btn1 = new Button("Rooms Section");
         btn1.setFont(font);
         btn1.setBackground(Color.YELLOW);
         btn2 = new Button("View Requests");
@@ -49,7 +49,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         sidebar.add(btn6);
         sidebar.add(btn7);
 
-        // registerinf the components
+        // registering the components
         btn1.addActionListener(this);
         btn2.addActionListener(this);
         btn3.addActionListener(this);
@@ -65,7 +65,6 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         cardLayout = new CardLayout();
 
         Panel homePanel;
-        AddRoomPanel addRoomPanel;
         Panel viewRequestPanel;
         Panel removeStudentPanel;
         Panel displayStudentPanel;
@@ -82,10 +81,13 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         l1 = new Label("Welcome to the Hostel Management System of PIEAS");
         l1.setFont(font1);
         homePanel.add(l1);
+
         // ADDING ALL PANELS TO CARDLAYOUT
         contentPanel.add(homePanel, "HOME");
-        addRoomPanel = new AddRoomPanel();
-        contentPanel.add(addRoomPanel, "ADDROOM");
+        // 1
+        RoomSectionPanel roomSectionPanel = new RoomSectionPanel();
+        contentPanel.add(roomSectionPanel, "Room Section");
+
         // 2
         viewRequestPanel = new ViewRequestPanel();
         contentPanel.add(viewRequestPanel, "REQUEST");
@@ -120,7 +122,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btn1) {
-            cardLayout.show(contentPanel, "ADDROOM");
+            cardLayout.show(contentPanel, "Room Section");
         }
 
         else if (e.getSource() == btn2) {
@@ -148,6 +150,72 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         }
     }
 
+    public static void main(String[] args) {
+
+        ManagerMainDashboard main = new ManagerMainDashboard();
+    }
+}
+
+// All about Room
+class RoomSectionPanel extends Panel implements ActionListener {
+    CardLayout roomCard;
+    Panel roomContent;
+    Button addRoomBtn, requestBtn, detailsBtn;
+
+    public RoomSectionPanel() {
+        setLayout(new BorderLayout());
+
+        // Top bar with 3 buttons
+        Panel tabBar = new Panel(new GridLayout(1, 3, 10, 10));
+        Font font = new Font("SanSerif", Font.BOLD, 18);
+        font.getStyle();
+        addRoomBtn = new Button("Add Room");
+        addRoomBtn.setBackground(Color.CYAN);
+        addRoomBtn.setFont(font);
+        requestBtn = new Button("Room Requests");
+        requestBtn.setBackground(Color.CYAN);
+        requestBtn.setFont(font);
+        detailsBtn = new Button("View Room Details");
+        detailsBtn.setBackground(Color.CYAN);
+        detailsBtn.setFont(font);
+
+        tabBar.add(addRoomBtn);
+        tabBar.add(requestBtn);
+        tabBar.add(detailsBtn);
+
+        add(tabBar, BorderLayout.NORTH);
+
+        // CardLayout for sub-panels
+        roomCard = new CardLayout();
+        roomContent = new Panel(roomCard);
+        // Default Panel when Room section button is clicked to show.
+        Panel defaultPanel = new Panel();
+        defaultPanel.add(new Label("Select an option above"));
+
+        roomContent.add(defaultPanel, "DEFAULT");
+        roomContent.add(new AddRoomPanel(), "ADD");
+        roomContent.add(new ViewRequestPanel(), "REQUEST");
+        roomContent.add(new RoomDetailsPanel(), "DETAILS");
+
+        add(roomContent, BorderLayout.CENTER);
+        // Show default first
+        roomCard.show(roomContent, "DEFAULT");
+        // Register listeners
+        addRoomBtn.addActionListener(this);
+        requestBtn.addActionListener(this);
+        detailsBtn.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addRoomBtn) {
+            roomCard.show(roomContent, "ADD");
+        } else if (e.getSource() == requestBtn) {
+            roomCard.show(roomContent, "REQUEST");
+        } else if (e.getSource() == detailsBtn) {
+            roomCard.show(roomContent, "DETAILS");
+        }
+    }
 }
 
 // addroompanel class
@@ -201,9 +269,104 @@ class AddRoomPanel extends Panel implements ActionListener {
     }
 }
 
+// Room Details Panel
+class RoomDetailsPanel extends Panel {
+    Label RoomNo, RoomCapacity, NumofStudents, Space;
+
+    public RoomDetailsPanel() {
+        // 1. Main panel setup
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(250, 250, 255));
+        Panel header = new Panel();
+        header.setLayout(new GridLayout(1, 4, 15, 0));
+        header.setBackground(new Color(70, 130, 180));
+
+        Font headerFont = new Font("SansSerif", Font.BOLD, 18);
+        Color textColor = Color.WHITE;
+
+        RoomNo = new Label("Room Number", Label.CENTER);
+        RoomNo.setFont(headerFont);
+        RoomNo.setForeground(textColor);
+        header.add(RoomNo);
+
+        RoomCapacity = new Label("Room Capacity", Label.CENTER);
+        RoomCapacity.setFont(headerFont);
+        RoomCapacity.setForeground(textColor);
+        header.add(RoomCapacity);
+
+        NumofStudents = new Label("Number of Students", Label.CENTER);
+        NumofStudents.setFont(headerFont);
+        NumofStudents.setForeground(textColor);
+        header.add(NumofStudents);
+
+        Space = new Label("Empty space", Label.CENTER);
+        Space.setFont(headerFont);
+        Space.setForeground(textColor);
+        header.add(Space);
+        // added the header in North
+        this.add(header, BorderLayout.NORTH);
+
+        // data panel , here all the data of the students will appear
+        Panel dataContainer = new Panel();
+        dataContainer.setLayout(new BoxLayout(dataContainer, BoxLayout.Y_AXIS));
+        // ScrolPane for more data
+        ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+        scrollPane.add(dataContainer);
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        dataContainer.add(createRoomRow("134", "3", "3", "0", 0));
+        dataContainer.add(createRoomRow("165", "5", "4", "1", 1));
+        dataContainer.add(createRoomRow("134", "3", "3", "0", 0));
+        dataContainer.add(createRoomRow("165", "5", "4", "1", 1));
+        dataContainer.add(createRoomRow("134", "3", "3", "0", 0));
+        dataContainer.add(createRoomRow("165", "5", "4", "1", 1));
+        dataContainer.add(createRoomRow("134", "3", "3", "0", 0));
+
+    }
+
+    private Panel createRoomRow(String RoomNo, String Capacity, String NoStudents, String EmptySpace, int rowIndex) {
+
+        // Create a panel for this row
+        Panel row = new Panel();
+
+        // Use GridLayout(1, 4) to match the header's 4 columns
+        row.setLayout(new GridLayout(1, 4));
+
+        // Create labels for each piece of data (centered)
+        Label room = new Label(RoomNo, Label.CENTER);
+        Label capacity = new Label(Capacity, Label.CENTER);
+        Label students = new Label(NoStudents, Label.CENTER);
+        Label space = new Label(EmptySpace, Label.CENTER);
+
+        // Set the same font as header for consistency
+        Font font = new Font("SansSerif", Font.CENTER_BASELINE, 14);
+        room.setFont(font);
+        capacity.setFont(font);
+        students.setFont(font);
+        space.setFont(font);
+
+        // Add labels to the row
+        row.add(room);
+        row.add(capacity);
+        row.add(students);
+        row.add(space);
+        // for good visuality
+        if (rowIndex % 2 == 0) {
+            row.setBackground(Color.GREEN);
+        } else {
+            row.setBackground(new Color(245, 245, 245)); // Very light gray
+        }
+        return row;
+    }
+}
+
 // 2. view Request panel class
 class ViewRequestPanel extends Panel {
-
+    public ViewRequestPanel() {
+        setLayout(new FlowLayout());
+        Button b1 = new Button("Button");
+        this.add(b1);
+    }
 }
 
 // 3.remove student panel class
