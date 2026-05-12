@@ -1,17 +1,17 @@
-package Project;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.BoxLayout;
-import Project.Room;
 
 public class ManagerMainDashboard extends Frame implements ActionListener {
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7;
     Panel sidebar, contentPanel;
     Label l1;
     CardLayout cardLayout;
+    boolean isManagerLoggedIn;
 
-    public ManagerMainDashboard() {
+    public ManagerMainDashboard(boolean loginStatus) {
+        this.isManagerLoggedIn = loginStatus;
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
         this.setSize(500, 500);
         this.setBackground(Color.BLUE);
@@ -107,7 +107,8 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         visitorPanel = new VisitorPanel();
         contentPanel.add(visitorPanel, "VISITOR");
         // 7
-        messMenuPanel = new MessMenuPanel();
+        // In ManagerMainDashboard constructor:
+        messMenuPanel = new MessMenuPanel(true);
         contentPanel.add(messMenuPanel, "MESS");
 
         // ADD CONTENT PANEL TO FRAME
@@ -155,7 +156,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
 
     public static void main(String[] args) {
 
-        ManagerMainDashboard main = new ManagerMainDashboard();
+        ManagerMainDashboard main = new ManagerMainDashboard(true);
     }
 }
 
@@ -221,7 +222,8 @@ class RoomSectionPanel extends Panel implements ActionListener {
     }
 }
 
-// addroompanel class - MERGED: UI from first version + DB logic from second version
+// addroompanel class - MERGED: UI from first version + DB logic from second
+// version
 class AddRoomPanel extends Panel implements ActionListener {
 
     TextField roomNo, capacity;
@@ -271,24 +273,23 @@ class AddRoomPanel extends Panel implements ActionListener {
             try {
                 int roomNumber = Integer.parseInt(roomText.trim());
                 int capacityValue = Integer.parseInt(capText.trim());
-                
+
                 // Validation
                 if (roomNumber <= 0 || capacityValue <= 0) {
                     l1.setText("Please enter valid positive numbers");
                     l1.setForeground(Color.RED);
                     return;
                 }
-                
+
                 // Call database method
                 room.addRoom(roomNumber, capacityValue);
-                
+
                 // Success feedback
                 l1.setText("Room added successfully");
                 l1.setForeground(Color.GREEN);
                 roomNo.setText("");
                 capacity.setText("");
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 l1.setText("Please enter valid integers only");
                 l1.setForeground(Color.RED);
                 System.out.println("Input Error: " + ex.getMessage());
@@ -505,6 +506,13 @@ class DisplayStudentPanel extends Panel {
 
         dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", "16790", 0));
         dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", "16340", 1));
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", "16790", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", "16340", 1));
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", "16790", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", "16340", 1));
+
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", "16790", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", "16340", 1));
 
     }
 
@@ -628,35 +636,4 @@ class PaymentPanel extends Panel {
 // 6 Visitor Panel - Kept from first version (empty but structured)
 class VisitorPanel extends Panel {
 
-}
-
-// 7. Mess Menu Panel - Kept full UI from first version
-class MessMenuPanel extends Panel {
-    TextArea messArea;
-    Button editBtn, saveBtn;
-
-    public MessMenuPanel() {
-        this.setLayout(new BorderLayout());
-        Panel header = new Panel();
-        Font font = new Font("SanSerif", Font.CENTER_BASELINE, 20);
-        Label messMenu = new Label("Mess Menu", Label.CENTER);
-        messMenu.setFont(font);
-        header.setBackground(Color.CYAN);
-        header.add(messMenu);
-        this.add(header, BorderLayout.NORTH);
-
-        Panel menuArea = new Panel();
-        messArea = new TextArea();
-        messArea.setSize(500, 500);
-        menuArea.add(messArea);
-        this.add(menuArea, BorderLayout.CENTER);
-
-        Panel bottumPanel = new Panel();
-        editBtn = new Button("edit");
-        saveBtn = new Button("Save");
-        bottumPanel.add(editBtn);
-        bottumPanel.add(saveBtn);
-
-        this.add(bottumPanel, BorderLayout.SOUTH);
-    }
 }
