@@ -1,0 +1,60 @@
+// File: MessMenuPanel.java
+
+import java.awt.*;
+
+public class MessMenuPanel extends Panel {
+    TextArea messArea;
+    Button editBtn, saveBtn;
+    private boolean isEditable;
+
+    // Constructor with edit permission parameter
+    public MessMenuPanel(boolean canEdit) {
+        this.isEditable = canEdit;
+        setupUI();
+    }
+
+    private void setupUI() {
+        this.setLayout(new BorderLayout());
+
+        Panel header = new Panel();
+        Font font = new Font("SanSerif", Font.CENTER_BASELINE, 20);
+        Label messMenu = new Label("Mess Menu", Label.CENTER);
+        messMenu.setFont(font);
+        header.setBackground(Color.CYAN);
+        header.add(messMenu);
+        this.add(header, BorderLayout.NORTH);
+
+        messArea = new TextArea(
+                "          Monday: Tuesday: Wednesday: Thursday: Friday: Saturday: Sunday: \n" +
+                        "Breakfast: Omelet, Fry, Channy, Bhjya\n" +
+                        "Lunch: Rice, Chicken, Daal, Salad\n" +
+                        "Dinner: Roti, Vegetable, Yogurt",
+                15, 60);
+        messArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        messArea.setEditable(isEditable); // Control editability
+        this.add(messArea, BorderLayout.CENTER);
+
+        Panel bottomPanel = new Panel();
+
+        // Only show Edit/Save if user can edit
+        if (isEditable) {
+            editBtn = new Button("Edit");
+            saveBtn = new Button("Save");
+            editBtn.setFont(font);
+            saveBtn.setFont(font);
+            editBtn.setBackground(Color.GREEN);
+            saveBtn.setBackground(Color.ORANGE);
+
+            editBtn.addActionListener(e -> messArea.setEditable(true));
+            saveBtn.addActionListener(e -> {
+                messArea.setEditable(false);
+                messArea.setText(messArea.getText());
+            });
+
+            bottomPanel.add(editBtn);
+            bottomPanel.add(saveBtn);
+        }
+
+        this.add(bottomPanel, BorderLayout.SOUTH);
+    }
+}
