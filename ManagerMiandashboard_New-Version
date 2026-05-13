@@ -25,7 +25,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         btn1 = new Button("Rooms Section");
         btn1.setFont(font);
         btn1.setBackground(Color.YELLOW);
-        btn2 = new Button("Add Payments");
+        btn2 = new Button("Payment Section");
         btn2.setFont(font);
         btn2.setBackground(Color.YELLOW);
         btn3 = new Button("Remove Students");
@@ -34,7 +34,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         btn4 = new Button("Display Students");
         btn4.setFont(font);
         btn4.setBackground(Color.YELLOW);
-        btn5 = new Button("Payments Details");
+        btn5 = new Button("view Complaints");
         btn5.setFont(font);
         btn5.setBackground(Color.YELLOW);
         btn6 = new Button("View Visitors");
@@ -74,6 +74,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         Panel paymentPanel;
         Panel visitorPanel;
         Panel messMenuPanel;
+        Panel complaintPanel;
 
         // content panel details
         Font font1 = new Font("SansSerif", Font.BOLD, 40);
@@ -91,6 +92,8 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         RoomSectionPanel roomSectionPanel = new RoomSectionPanel();
         contentPanel.add(roomSectionPanel, "Room Section");
 
+        PaymentsDetailsPanel paymentSectionPanel = new PaymentsDetailsPanel();
+        contentPanel.add(paymentSectionPanel, "PAYMENT SECTION");
         // 2
         viewRequestPanel = new ViewRequestPanel();
         contentPanel.add(viewRequestPanel, "REQUEST");
@@ -100,14 +103,14 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         // 4
         displayStudentPanel = new DisplayStudentPanel();
         contentPanel.add(displayStudentPanel, "DISPLAY");
-        // 5
-        paymentPanel = new PaymentPanel();
-        contentPanel.add(paymentPanel, "PAYMENT");
         // 6
         visitorPanel = new VisitorPanel();
         contentPanel.add(visitorPanel, "VISITOR");
-        // 7
-        // In ManagerMainDashboard constructor:
+        // 7 compplaint panel
+        complaintPanel = new ComplaintPanel();
+        contentPanel.add(complaintPanel, "COMPLAINT");
+
+        // 8 mess menu panel
         messMenuPanel = new MessMenuPanel(true);
         contentPanel.add(messMenuPanel, "MESS");
 
@@ -130,7 +133,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         }
 
         else if (e.getSource() == btn2) {
-            cardLayout.show(contentPanel, "REQUEST");
+            cardLayout.show(contentPanel, "PAYMENT SECTION");
         }
 
         else if (e.getSource() == btn3) {
@@ -142,7 +145,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         }
 
         else if (e.getSource() == btn5) {
-            cardLayout.show(contentPanel, "PAYMENT");
+            cardLayout.show(contentPanel, "COMPLAINT");
         }
 
         else if (e.getSource() == btn6) {
@@ -223,7 +226,6 @@ class RoomSectionPanel extends Panel implements ActionListener {
 }
 
 // addroompanel class - MERGED: UI from first version + DB logic from second
-// version
 class AddRoomPanel extends Panel implements ActionListener {
 
     TextField roomNo, capacity;
@@ -467,7 +469,6 @@ class RemoveStudentPanel extends Panel implements ActionListener {
             }
         }
     }
-
 }
 
 // 4.display students panel - Kept full UI from first version
@@ -553,17 +554,159 @@ class DisplayStudentPanel extends Panel {
     }
 }
 
-// Payment Panel - Kept full UI from first version
-class PaymentPanel extends Panel {
+// 6 Visitor Panel - Kept from first version (empty but structured)
+class VisitorPanel extends Panel {
 
-    public PaymentPanel() {
+}
+
+// Payments Details Panel - add payment , receive payment, and view details of
+// payments
+// Payment section is more complex as it has 3 sub-panels, so I used CardLayout
+// for it and added buttons to switch between them.
+class PaymentsDetailsPanel extends Panel implements ActionListener {
+    CardLayout paymentsCard;
+    Panel paymentContent;
+    Button addButton, receiveButton, detailsButton;
+
+    public PaymentsDetailsPanel() {
+        setLayout(new BorderLayout());
+
+        // Top bar with 3 buttons
+        Panel tabBar = new Panel(new GridLayout(1, 3, 10, 10));
+        Font font = new Font("SanSerif", Font.BOLD, 18);
+        font.getStyle();
+        addButton = new Button("Add Payment");
+        addButton.setBackground(Color.CYAN);
+        addButton.setFont(font);
+        receiveButton = new Button("Receive Payment");
+        receiveButton.setBackground(Color.CYAN);
+        receiveButton.setFont(font);
+        detailsButton = new Button("Payment Details");
+        detailsButton.setBackground(Color.CYAN);
+        detailsButton.setFont(font);
+
+        tabBar.add(addButton);
+        tabBar.add(receiveButton);
+        tabBar.add(detailsButton);
+
+        add(tabBar, BorderLayout.NORTH);
+
+        // CardLayout for sub-panels
+        paymentsCard = new CardLayout();
+        paymentContent = new Panel(paymentsCard);
+
+        paymentContent.add(new AddPaymentPanel(), "ADD");
+        paymentContent.add(new ReceivePaymentPanel(), "RECEIVE");
+        paymentContent.add(new PaymentDetails(), "DETAILS");
+
+        add(paymentContent, BorderLayout.CENTER);
+        // Register listeners
+        addButton.addActionListener(this);
+        receiveButton.addActionListener(this);
+        detailsButton.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addButton) {
+            paymentsCard.show(paymentContent, "ADD");
+        } else if (e.getSource() == receiveButton) {
+            paymentsCard.show(paymentContent, "RECEIVE");
+        } else if (e.getSource() == detailsButton) {
+            paymentsCard.show(paymentContent, "DETAILS");
+        }
+    }
+}
+
+// Add Payment Panel
+class AddPaymentPanel extends Panel implements ActionListener {
+    Button addPaymentBtn;
+    TextField amountField;
+    Label amountLabel;
+
+    public AddPaymentPanel() {
+        setLayout(new FlowLayout());
+        Font font = new Font("SansSerif", Font.BOLD, 24);
+        amountLabel = new Label("Amount:");
+        amountLabel.setFont(font);
+        amountField = new TextField(20);
+        amountField.setFont(font);
+        addPaymentBtn = new Button("Add Fee to all Students");
+        addPaymentBtn.setFont(font);
+        addPaymentBtn.setBackground(Color.GREEN);
+        add(amountLabel);
+        add(amountField);
+        add(addPaymentBtn);
+        // Action listener for add payment button can be implemented here
+        addPaymentBtn.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addPaymentBtn) {
+
+        }
+    }
+}
+
+// receive payment panel
+class ReceivePaymentPanel extends Panel implements ActionListener {
+    Label studentName, id, amount;
+    TextField studentNameField, idField, amountField;
+    Button receiveBtn;
+
+    public ReceivePaymentPanel() {
+        setLayout(new FlowLayout());
+        Font font = new Font("SansSerif", Font.BOLD, 24);
+        studentName = new Label("Student Name:");
+        studentName.setFont(font);
+        studentNameField = new TextField(20);
+        studentNameField.setFont(font);
+
+        id = new Label("Student ID:");
+        id.setFont(font);
+        idField = new TextField(20);
+        idField.setFont(font);
+
+        amount = new Label("Amount:");
+        amount.setFont(font);
+        amountField = new TextField(20);
+        amountField.setFont(font);
+
+        receiveBtn = new Button("Receive Payment");
+        receiveBtn.setFont(font);
+        receiveBtn.setBackground(Color.GREEN);
+
+        add(studentName);
+        add(studentNameField);
+        add(id);
+        add(idField);
+        add(amount);
+        add(amountField);
+        add(receiveBtn);
+        // Action listener for receive payment button can be implemented here
+        receiveBtn.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == receiveBtn) {
+
+        }
+    }
+}
+
+// Payment detail Panel
+class PaymentDetails extends Panel {
+
+    public PaymentDetails() {
         // Main layout
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(250, 255, 250));
 
         // Header
         Panel header = new Panel(new GridLayout(1, 4, 10, 0));
-        header.setBackground(new Color(60, 179, 113)); // Medium sea green
+        header.setBackground(Color.green); // Medium sea green
         Font headerFont = new Font("SansSerif", Font.BOLD, 16);
 
         Label h1 = new Label("Student ID", Label.CENTER);
@@ -633,7 +776,8 @@ class PaymentPanel extends Panel {
     }
 }
 
-// 6 Visitor Panel - Kept from first version (empty but structured)
-class VisitorPanel extends Panel {
+// 7. Complaint Panel - Kept from first version (empty but structured)
+class ComplaintPanel extends Panel 
+{
 
 }
