@@ -777,7 +777,6 @@ class PaymentDetails extends Panel {
 }
 
 // 7. Complaint Panel - Kept from first version (empty but structured)
-class ComplaintPanel extends Panel 
-{
+class ComplaintPanel extends Panel {
 
 }
