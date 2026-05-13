@@ -1,86 +1,55 @@
 package Project;
 import java.awt.event.ActionEvent;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
 import Project.ManagerMainDashboard;
 public class Room {
    private ArrayList<Integer> roomNumber = new ArrayList<>();
     private ArrayList<Integer> roomCapacity = new ArrayList<>();
     private static String hostelName = "A-Hostel";
     private static int issuedRooms = 0;
-    private static int availableRooms = 10;
-    private static int totalRooms = 10;
+    private static int availableRooms = 0;
+    private static int totalRooms = 0;
     private static ArrayList<Boolean> status = new ArrayList<>();
     private static ArrayList<Integer> allotedRoom =  new ArrayList<>();
     private int issuedRoomNumber;
     public Room(){
-     roomNumber.add(100);
-     roomNumber.add(101);
-     roomNumber.add(102);
-     roomNumber.add(103);
-     roomNumber.add(104);
-     roomNumber.add(105);
-     roomNumber.add(106);
-     roomNumber.add(107);
-     roomNumber.add(108);
-     roomNumber.add(109);
-     roomCapacity.add(2);
-     roomCapacity.add(1);
-     roomCapacity.add(3);
-     roomCapacity.add(2);
-     roomCapacity.add(4);
-     roomCapacity.add(5);
-     roomCapacity.add(6);
-     roomCapacity.add(2);
-     roomCapacity.add(3);
-     roomCapacity.add(3);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     allotedRoom.add(0);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
-     status.add(false);
+
 
     }
-   public void addRoom(int roomnumber,int roomcapacity){
+   public void addRoom(int roomnumber,int roomcapacity) throws ClassNotFoundException {
         if(roomnumber > 0 || roomcapacity > 0) {
             this.roomNumber.add(roomnumber);
             this.roomCapacity.add(roomcapacity);
             allotedRoom.add(0);
             totalRooms += 1;
             availableRooms += 1;
+            status.add(false);
+            Connection conn = null;
+            try{
+                String url = "jdbc:sqlite:Room.db";
+                conn = DriverManager.getConnection(url);
+            // Create your tables if they don't exist
+            Statement stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE IF NOT EXISTS rooms (ID INTEGER PRIMARY KEY NOT NULL UNIQUE, HostelName VARCHAR(80), TotalRooms INTEGER, IssuedRooms INTEGER, AllotedRooms INTEGER, AvailableRooms INTEGER ,Status BOOLEAN,RoomNumber INTEGER NOT NULL, Capacity INTEGER NOT NULL)");
+                String insertSQL = "INSERT INTO Rooms (RoomNumber, Capacity, AllotedRooms, Status) VALUES (?, ?, ?, ?)";
 
-            String url = "JDBC:sqlite:A:/Java/Practice/src/Practice/Room.db";
-
-            try(Connection conn = DriverManager.getConnection(url);
-                Statement stmt = conn.createStatement()){
-                String sql = "INSERT INTO Room(RoomNumber, RoomCapacity, AllotedCapacity) " +
-                        "VALUES (" + roomnumber + ", " + roomcapacity + ", 0)";
-                stmt.executeUpdate(sql);
-
-                stmt.executeUpdate(sql);
-
-
+                PreparedStatement pstmt = conn.prepareStatement(insertSQL);
+                pstmt.setInt(1, roomnumber);      // RoomNumber
+                pstmt.setInt(2, roomcapacity);    // Capacity
+                pstmt.setInt(3, 0);               // AllotedRooms
+                pstmt.setBoolean(4, false);       // Status
+                pstmt.executeUpdate();
             }catch(SQLException e){
                 System.out.println("Error: " + e.getMessage());
             }
+            /*try(Connection conn = DriverManager.getConnection(url)) {
+                System.out.println("Connected to: " + conn.getMetaData().getURL());
+                // rest of your code
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }*/
 
         }
         else{
