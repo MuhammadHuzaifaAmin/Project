@@ -97,7 +97,10 @@ public class StudentMainDashboard extends Frame implements ActionListener {
             cardLayout.show(contentPanel, "COMPLAINTS");
         } else if (e.getSource() == btn6) {
             cardLayout.show(contentPanel, "VISITOR");
+            contentPanel.revalidate();
+            contentPanel.repaint();
         }
+
     }
 
     public static void main(String[] args) {
@@ -119,7 +122,7 @@ class ProfilePanel extends Panel {
         profileLabel.setBackground(Color.WHITE);
         profileLabel.setFont(font1);
         this.add(profileLabel, BorderLayout.NORTH);
-        Panel leftPanel = new Panel(new GridLayout(5, 1));
+        Panel leftPanel = new Panel(new GridLayout(5, 2, 10, 10));
         name = new Label("Name: ");
         name.setFont(font);
         // Change as per each student
@@ -207,7 +210,67 @@ class RoomRequestPanel extends Panel implements ActionListener {
         }
     }
 }
-// Mess Menu Panel - view mess menu and request changes (if allowed)
+
+// Visitor Panel - manage visitor entries and exits
+class VisitorPanel extends Panel implements ActionListener {
+    Label visitorLabel, studentname, visitorname, studentId, relation;
+    TextField visitorTf, studentnameTf, studentIdTf, relationTf;
+    Button submitButton;
+
+    public VisitorPanel() {
+        this.setLayout(new BorderLayout());
+        Font font = new Font("SansSerif", Font.BOLD, 24);
+        visitorLabel = new Label("Visitor Management", Label.CENTER);
+        visitorLabel.setFont(font);
+        this.add(visitorLabel, BorderLayout.NORTH);
+
+        Panel formPanel = new Panel(new GridLayout(4, 2, 10, 10));
+        studentname = new Label("Student Name:");
+        Font font1 = new Font("SansSerif", Font.BOLD, 18);
+        studentname.setFont(font1);
+        studentnameTf = new TextField(25);
+        studentnameTf.setFont(font1);
+        visitorname = new Label("Visitor Name:");
+        visitorname.setFont(font1);
+        visitorTf = new TextField(25);
+        visitorTf.setFont(font1);
+        studentId = new Label("Student ID:");
+        studentId.setFont(font1);
+        studentIdTf = new TextField(25);
+        studentIdTf.setFont(font1);
+        relation = new Label("Relation:");
+        relation.setFont(font1);
+        relationTf = new TextField(25);
+        relationTf.setFont(font1);
+
+        formPanel.add(studentname);
+        formPanel.add(studentnameTf);
+        formPanel.add(visitorname);
+        formPanel.add(visitorTf);
+        formPanel.add(studentId);
+        formPanel.add(studentIdTf);
+        formPanel.add(relation);
+        formPanel.add(relationTf);
+        this.add(formPanel, BorderLayout.CENTER);
+
+        submitButton = new Button("Submit Visitor Entry");
+        submitButton.setBackground(Color.GREEN);
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFont(new Font("SanSerif", Font.BOLD, 18));
+        this.add(submitButton, BorderLayout.SOUTH);
+        // registering the button
+        submitButton.addActionListener(this);
+        // Add action listener for submit button (not implemented here)
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitButton) {
+            submitButton.setLabel("Visitor Entry Submitted");
+            // Handle visitor entry submission (not implemented here)
+        }
+    }
+}
 
 // Fee Details Panel - view fee details and make payments
 class FeeDetailsPanel extends Panel {
@@ -271,16 +334,5 @@ class ComplaintsPanel extends Panel implements ActionListener {
         if (e.getSource() == submitButton) {
 
         }
-    }
-}
-
-// Visitor Panel - manage visitor entries and exits
-class VisitorPanel extends Panel {
-    public VisitorPanel() {
-        this.setLayout(new BorderLayout());
-        Label visitorLabel = new Label("Visitor Management Page", Label.CENTER);
-        Font font = new Font("SansSerif", Font.BOLD, 24);
-        visitorLabel.setFont(font);
-        this.add(visitorLabel, BorderLayout.CENTER);
     }
 }
