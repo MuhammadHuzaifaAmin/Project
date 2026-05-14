@@ -425,27 +425,27 @@ class ViewRequestPanel extends Panel implements ActionListener {
         scrollPane.add(dataContainer);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", 0));
-        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
-        dataContainer.add(createStudentRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
-        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
-        dataContainer.add(createStudentRow("134", "Qasim suri", "Sri khan", 4));
-        dataContainer.add(createStudentRow("165", "Rafail", "Pak Army", 5));
-        dataContainer.add(createStudentRow("134", "Bumrah", "Farhan", 6));
-        dataContainer.add(createStudentRow("165", "Zampa", "Babar", 7));
-        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", 0));
-        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
-        dataContainer.add(createStudentRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
-        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
-        dataContainer.add(createStudentRow("134", "Qasim suri", "Sri khan", 4));
-        dataContainer.add(createStudentRow("165", "Rafail", "Pak Army", 5));
-        dataContainer.add(createStudentRow("134", "Bumrah", "Farhan", 6));
-        dataContainer.add(createStudentRow("165", "Zampa", "Babar", 7));
+        dataContainer.add(createRequestRow("134", "Ali Raza", "Ibrahim Arif", 0));
+        dataContainer.add(createRequestRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
+        dataContainer.add(createRequestRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
+        dataContainer.add(createRequestRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
+        dataContainer.add(createRequestRow("134", "Qasim suri", "Sri khan", 4));
+        dataContainer.add(createRequestRow("165", "Rafail", "Pak Army", 5));
+        dataContainer.add(createRequestRow("134", "Bumrah", "Farhan", 6));
+        dataContainer.add(createRequestRow("165", "Zampa", "Babar", 7));
+        dataContainer.add(createRequestRow("134", "Ali Raza", "Ibrahim Arif", 0));
+        dataContainer.add(createRequestRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
+        dataContainer.add(createRequestRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
+        dataContainer.add(createRequestRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
+        dataContainer.add(createRequestRow("134", "Qasim suri", "Sri khan", 4));
+        dataContainer.add(createRequestRow("165", "Rafail", "Pak Army", 5));
+        dataContainer.add(createRequestRow("134", "Bumrah", "Farhan", 6));
+        dataContainer.add(createRequestRow("165", "Zampa", "Babar", 7));
 
     }
 
     // Helper method: Creates ONE row panel for a student
-    private Panel createStudentRow(String id, String name, String father, int rowIndex) {
+    private Panel createRequestRow(String id, String name, String father, int rowIndex) {
 
         // Create a panel for this row
         Panel row = new Panel();
@@ -488,7 +488,7 @@ class ViewRequestPanel extends Panel implements ActionListener {
         Button source = (Button) e.getSource();
         if (source.getLabel().equals("Add to Hostel")) {
             source.setLabel("Added");
-            source.setBackground(Color.GRAY);
+            source.setBackground(Color.BLUE);
             source.setEnabled(false);
         }
     }
