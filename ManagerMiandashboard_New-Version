@@ -651,7 +651,69 @@ class DisplayStudentPanel extends Panel {
 
 // 6 Visitor Panel - Kept from first version (empty but structured)
 class VisitorPanel extends Panel {
+    Label SudentName, StudentID, VisitorName, Date;
 
+    VisitorPanel() {
+        this.setLayout(new BorderLayout());
+        Panel header = new Panel(new GridLayout(1, 4, 10, 0));
+        header.setBackground(new Color(120, 200, 160)); // Medium sea green
+        Font headerFont = new Font("SansSerif", Font.BOLD, 16);
+        header.setFont(headerFont);
+        SudentName = new Label("Student Name", Label.CENTER);
+        SudentName.setFont(headerFont);
+        SudentName.setForeground(Color.WHITE);
+        header.add(SudentName);
+        StudentID = new Label("Student ID", Label.CENTER);
+        StudentID.setFont(headerFont);
+        StudentID.setForeground(Color.WHITE);
+        header.add(StudentID);
+        VisitorName = new Label("Visitor Name", Label.CENTER);
+        VisitorName.setFont(headerFont);
+        VisitorName.setForeground(Color.WHITE);
+        header.add(VisitorName);
+        Date = new Label("Date", Label.CENTER);
+        Date.setFont(headerFont);
+        Date.setForeground(Color.WHITE);
+        header.add(Date);
+        this.add(header, BorderLayout.NORTH);
+
+        Panel dataContainer = new Panel();
+        dataContainer.setLayout(new BoxLayout(dataContainer, BoxLayout.Y_AXIS));
+        ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+        scrollPane.add(dataContainer);
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        dataContainer.add(createVisitorRow("Ali Raza", "134", "Ibrahim Arif", "Father", "2024-05-01", 0));
+        dataContainer.add(createVisitorRow("Rafaqat Hussain", "165", "Muhamma Ibrahim", "Brother", "2024-05-02", 1));
+    }
+
+    // method to create rows for visitor details
+    private Panel createVisitorRow(String studentName, String studentID, String visitorName, String relationship,
+            String date, int rowIndex) {
+        Panel row = new Panel(new GridLayout(1, 4));
+        Label lblStudentName = new Label(studentName, Label.CENTER);
+        Label lblStudentID = new Label(studentID, Label.CENTER);
+        Label lblVisitorName = new Label(visitorName, Label.CENTER);
+        Label lblRelationship = new Label(relationship, Label.CENTER);
+        Label lblDate = new Label(date, Label.CENTER);
+        Font font = new Font("SansSerif", Font.CENTER_BASELINE, 14);
+        lblStudentName.setFont(font);
+        lblStudentID.setFont(font);
+        lblVisitorName.setFont(font);
+        lblRelationship.setFont(font);
+        lblDate.setFont(font);
+        row.add(lblStudentName);
+        row.add(lblStudentID);
+        row.add(lblVisitorName);
+        row.add(lblRelationship);
+        row.add(lblDate);
+        if (rowIndex % 2 == 0) {
+            row.setBackground(Color.GREEN);
+        } else {
+            row.setBackground(new Color(245, 245, 245)); // Very light gray
+        }
+        return row;
+    }
 }
 
 // for it and added buttons to switch between them.
