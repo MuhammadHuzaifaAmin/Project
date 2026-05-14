@@ -392,12 +392,107 @@ class RoomDetailsPanel extends Panel {
 }
 
 // 2. view Request panel class - Kept UI from first version
-class ViewRequestPanel extends Panel {
+class ViewRequestPanel extends Panel implements ActionListener {
+    Label id, name, father, action;
+
     public ViewRequestPanel() {
-        setLayout(new FlowLayout());
-        Button b1 = new Button("Button");
-        this.add(b1);
+        this.setLayout(new BorderLayout());
+
+        // hader panel
+        Panel headerPanel = new Panel();
+        headerPanel.setLayout(new GridLayout(1, 4));
+        headerPanel.setBackground(Color.LIGHT_GRAY);
+        Font font = new Font("Sansarif", Font.ROMAN_BASELINE, 15);
+        id = new Label("id", Label.CENTER);
+        id.setFont(font);
+        headerPanel.add(id);
+        name = new Label("Name", Label.CENTER);
+        name.setFont(font);
+        headerPanel.add(name);
+        father = new Label("Father", Label.CENTER);
+        father.setFont(font);
+        headerPanel.add(father);
+        action = new Label("Action", Label.CENTER);
+        action.setFont(font);
+        headerPanel.add(action);
+        this.add(headerPanel, BorderLayout.NORTH);
+
+        // data panel , here all the data of the students will appear
+        Panel dataContainer = new Panel();
+        dataContainer.setLayout(new BoxLayout(dataContainer, BoxLayout.Y_AXIS));
+        // ScrolPane for more data
+        ScrollPane scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+        scrollPane.add(dataContainer);
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
+        dataContainer.add(createStudentRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
+        dataContainer.add(createStudentRow("134", "Qasim suri", "Sri khan", 4));
+        dataContainer.add(createStudentRow("165", "Rafail", "Pak Army", 5));
+        dataContainer.add(createStudentRow("134", "Bumrah", "Farhan", 6));
+        dataContainer.add(createStudentRow("165", "Zampa", "Babar", 7));
+        dataContainer.add(createStudentRow("134", "Ali Raza", "Ibrahim Arif", 0));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 1));
+        dataContainer.add(createStudentRow("134", "Rehan Tabarik", "Tabarik Ahmed", 2));
+        dataContainer.add(createStudentRow("165", "Rafaqat Hussain", "Muhamma Ibrahim", 3));
+        dataContainer.add(createStudentRow("134", "Qasim suri", "Sri khan", 4));
+        dataContainer.add(createStudentRow("165", "Rafail", "Pak Army", 5));
+        dataContainer.add(createStudentRow("134", "Bumrah", "Farhan", 6));
+        dataContainer.add(createStudentRow("165", "Zampa", "Babar", 7));
+
     }
+
+    // Helper method: Creates ONE row panel for a student
+    private Panel createStudentRow(String id, String name, String father, int rowIndex) {
+
+        // Create a panel for this row
+        Panel row = new Panel();
+
+        // Use GridLayout(1, 4) to match the header's 4 columns
+        row.setLayout(new GridLayout(1, 4));
+
+        // Create labels for each piece of data (centered)
+        Label lblId = new Label(id, Label.CENTER);
+        Label lblName = new Label(name, Label.CENTER);
+        Label lblFather = new Label(father, Label.CENTER);
+        Button actionButton = new Button("Add to Hostel");
+
+        // Set the same font as header for consistency
+        Font font = new Font("SansSerif", Font.CENTER_BASELINE, 14);
+        lblId.setFont(font);
+        lblName.setFont(font);
+        lblFather.setFont(font);
+        actionButton.setFont(font);
+
+        // Add labels to the row
+        row.add(lblId);
+        row.add(lblName);
+        row.add(lblFather);
+        row.add(actionButton);
+
+        // registering the button
+        actionButton.addActionListener(this);
+        // for good visuality
+        if (rowIndex % 2 == 0) {
+            row.setBackground(Color.GREEN);
+        } else {
+            row.setBackground(new Color(245, 245, 245)); // Very light gray
+        }
+        return row;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Button source = (Button) e.getSource();
+        if (source.getLabel().equals("Add to Hostel")) {
+            source.setLabel("Added");
+            source.setBackground(Color.GRAY);
+            source.setEnabled(false);
+        }
+    }
+
 }
 
 // 3.remove student panel class - Kept full implementation from first version
@@ -407,7 +502,7 @@ class RemoveStudentPanel extends Panel implements ActionListener {
     Button btn1;
 
     RemoveStudentPanel() {
-        setLayout(new GridLayout(5, 2));
+        setLayout(new GridLayout(5, 2, 10, 10));
 
         Font labelFont = new Font("SansSerif", Font.BOLD, 24);
         Font textFont = new Font("SansSerif", Font.PLAIN, 22);
@@ -559,9 +654,6 @@ class VisitorPanel extends Panel {
 
 }
 
-// Payments Details Panel - add payment , receive payment, and view details of
-// payments
-// Payment section is more complex as it has 3 sub-panels, so I used CardLayout
 // for it and added buttons to switch between them.
 class PaymentsDetailsPanel extends Panel implements ActionListener {
     CardLayout paymentsCard;
