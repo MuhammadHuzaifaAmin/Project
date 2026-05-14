@@ -4,7 +4,7 @@ import java.awt.event.*;
 public class StudentMainDashboard extends Frame implements ActionListener {
     Button btn1, btn2, btn3, btn4, btn5, btn6;
     Panel contentPanel;
-    CardLayout cardLayout; 
+    CardLayout cardLayout;
 
     public StudentMainDashboard() {
         // Set layout FIRST before adding components
@@ -157,25 +157,89 @@ class ProfilePanel extends Panel {
 }
 
 // Room Request Panel - request room and view room details
-class RoomRequestPanel extends Panel {
+class RoomRequestPanel extends Panel implements ActionListener {
+    Label name, father, id;
+    TextField nameField, fatherField, idField;
+    Button submitButton;
+
     public RoomRequestPanel() {
         this.setLayout(new BorderLayout());
-        Label roomRequestLabel = new Label("Room Request Page", Label.CENTER);
+        Label roomRequestLabel = new Label("You can send room requests here", Label.CENTER);
         Font font = new Font("SansSerif", Font.BOLD, 24);
         roomRequestLabel.setFont(font);
-        this.add(roomRequestLabel, BorderLayout.CENTER);
+        this.add(roomRequestLabel, BorderLayout.NORTH);
+
+        // Form panel for room request
+        Panel formPanel = new Panel(new GridLayout(3, 2, 10, 10));
+        name = new Label("Name:");
+        name.setFont(new Font("SansSerif", Font.BOLD, 18));
+        nameField = new TextField();
+        nameField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        father = new Label("Father's Name:");
+        father.setFont(new Font("SansSerif", Font.BOLD, 18));
+        fatherField = new TextField();
+        fatherField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        id = new Label("ID:");
+        id.setFont(new Font("SansSerif", Font.BOLD, 18));
+        idField = new TextField();
+        idField.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        formPanel.add(name);
+        formPanel.add(nameField);
+        formPanel.add(father);
+        formPanel.add(fatherField);
+        formPanel.add(id);
+        formPanel.add(idField);
+        this.add(formPanel, BorderLayout.CENTER);
+        submitButton = new Button("Submit Room Request");
+        submitButton.setFont(new Font("SansSerif", Font.BOLD, 18));
+        submitButton.setBackground(Color.GREEN);
+        submitButton.setForeground(Color.WHITE);
+        this.add(submitButton, BorderLayout.SOUTH);
+        // Add action listener for submit button (not implemented here)
+        submitButton.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitButton) {
+            submitButton.setLabel("Request Submitted");
+            // Handle room request submission (not implemented here)
+        }
     }
 }
 // Mess Menu Panel - view mess menu and request changes (if allowed)
 
 // Fee Details Panel - view fee details and make payments
 class FeeDetailsPanel extends Panel {
+    Panel headerPanel;
+    Label feeDetailsLabel, pendingFeesLabel, amount1, paidFeesLabel, amount2;
+
     public FeeDetailsPanel() {
         this.setLayout(new BorderLayout());
-        Label feeDetailsLabel = new Label("Fee Details Page", Label.CENTER);
+        headerPanel = new Panel();
+        headerPanel.setBackground(Color.LIGHT_GRAY);
+        feeDetailsLabel = new Label("Fee Details Page", Label.CENTER);
+        feeDetailsLabel.setForeground(Color.BLUE);
         Font font = new Font("SansSerif", Font.BOLD, 24);
         feeDetailsLabel.setFont(font);
-        this.add(feeDetailsLabel, BorderLayout.CENTER);
+        headerPanel.add(feeDetailsLabel);
+        this.add(headerPanel, BorderLayout.NORTH);
+
+        Panel feePanel = new Panel(new GridLayout(2, 4, 20, 30));
+        pendingFeesLabel = new Label("Pending Fees:");
+        pendingFeesLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        amount1 = new Label("5000");
+        amount1.setForeground(Color.RED);
+        amount1.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        paidFeesLabel = new Label("Paid Fees:");
+        paidFeesLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        amount2 = new Label("15000");
+        amount2.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        feePanel.add(pendingFeesLabel);
+        feePanel.add(amount1);
+        feePanel.add(paidFeesLabel);
+        feePanel.add(amount2);
+        this.add(feePanel, BorderLayout.CENTER);
     }
 }
 
