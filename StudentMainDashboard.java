@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class StudentMainDashboard extends Frame implements ActionListener {
-    Button btn1, btn2, btn3, btn4, btn5, btn6;
+    Button btn1, btn2, btn3, btn4, btn5, btn6, logoutBtn;
     Panel contentPanel;
     CardLayout cardLayout;
 
@@ -17,47 +17,55 @@ public class StudentMainDashboard extends Frame implements ActionListener {
         Font font = new Font("Sansarif", Font.BOLD, 20);
 
         // Sidebar panel for buttons (use FlowLayout or GridLayout)
-        Panel sidebar = new Panel(new GridLayout(1, 6, 10, 10));
-        sidebar.setBackground(Color.DARK_GRAY);
+        Panel headerPanel = new Panel(new GridLayout(1, 7, 10, 10));
+        headerPanel.setBackground(Color.DARK_GRAY);
 
         btn1 = new Button("Profile");
         btn1.setFont(font);
         btn1.setBackground(Color.CYAN);
         btn1.addActionListener(this);
-        sidebar.add(btn1);
+        headerPanel.add(btn1);
 
         btn2 = new Button("Request Room");
         btn2.setFont(font);
         btn2.setBackground(Color.CYAN);
         btn2.addActionListener(this);
-        sidebar.add(btn2);
+        headerPanel.add(btn2);
 
         btn3 = new Button("Mess Menu");
         btn3.setFont(font);
         btn3.setBackground(Color.CYAN);
         btn3.addActionListener(this);
-        sidebar.add(btn3);
+        headerPanel.add(btn3);
 
         btn4 = new Button("Fee Details");
         btn4.setFont(font);
         btn4.setBackground(Color.CYAN);
         btn4.addActionListener(this);
-        sidebar.add(btn4);
+        headerPanel.add(btn4);
 
         btn5 = new Button("Complaints");
         btn5.setFont(font);
         btn5.setBackground(Color.CYAN);
         btn5.addActionListener(this);
-        sidebar.add(btn5);
+        headerPanel.add(btn5);
 
-        btn6 = new Button("Visitor");
+        btn6 = new Button("Add Visitor");
         btn6.setFont(font);
         btn6.setBackground(Color.CYAN);
         btn6.addActionListener(this);
-        sidebar.add(btn6);
+        headerPanel.add(btn6);
 
-        // Add sidebar to NORTH
-        this.add(sidebar, BorderLayout.NORTH);
+        // logout button
+        logoutBtn = new Button("Logout");
+        logoutBtn.setFont(font);
+        logoutBtn.setBackground(Color.RED);
+        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn.addActionListener(this);
+        headerPanel.add(logoutBtn);
+
+        // Add header panel to NORTH
+        this.add(headerPanel, BorderLayout.NORTH);
 
         // CardLayout for content switching
         cardLayout = new CardLayout();
@@ -69,7 +77,7 @@ public class StudentMainDashboard extends Frame implements ActionListener {
         contentPanel.add(new MessMenuPanel(false), "MESS");
         contentPanel.add(new FeeDetailsPanel(), "FEE");
         contentPanel.add(new ComplaintsPanel(), "COMPLAINTS");
-        contentPanel.add(new VisitorPanel(), "VISITOR");
+        contentPanel.add(new AddVisitorPanel(), "AddVISITOR");
 
         // Add content panel to CENTER
         this.add(contentPanel, BorderLayout.CENTER);
@@ -96,9 +104,12 @@ public class StudentMainDashboard extends Frame implements ActionListener {
         } else if (e.getSource() == btn5) {
             cardLayout.show(contentPanel, "COMPLAINTS");
         } else if (e.getSource() == btn6) {
-            cardLayout.show(contentPanel, "VISITOR");
+            cardLayout.show(contentPanel, "AddVISITOR");
             contentPanel.revalidate();
             contentPanel.repaint();
+        } else if (e.getSource() == logoutBtn) {
+            this.dispose();
+            new first();
         }
 
     }
@@ -212,12 +223,12 @@ class RoomRequestPanel extends Panel implements ActionListener {
 }
 
 // Visitor Panel - manage visitor entries and exits
-class VisitorPanel extends Panel implements ActionListener {
+class AddVisitorPanel extends Panel implements ActionListener {
     Label visitorLabel, studentname, visitorname, studentId, relation;
     TextField visitorTf, studentnameTf, studentIdTf, relationTf;
     Button submitButton;
 
-    public VisitorPanel() {
+    public AddVisitorPanel() {
         this.setLayout(new BorderLayout());
         Font font = new Font("SansSerif", Font.BOLD, 24);
         visitorLabel = new Label("Visitor Management", Label.CENTER);
