@@ -1,0 +1,120 @@
+package Project;
+import java.sql.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class StudentSignUp extends Frame implements ActionListener {
+    Label l1, l2, l3;
+    TextField tf1, tf2, tf3;
+    Button btn1;
+
+    public StudentSignUp() {
+        this.setTitle("Student Sign Up");
+        this.setSize(350, 500);
+        this.setResizable(false);
+        this.setBackground(Color.BLUE);
+        this.setLayout(new GridLayout(7, 1));
+
+        // fonts
+        Font font = new Font("Sansarif", Font.CENTER_BASELINE, 15);
+        l1 = new Label("Name");
+        l1.setFont(font);
+        add(l1);
+        tf1 = new TextField(30);
+        tf1.setFont(font);
+        add(tf1);
+        l2 = new Label("Father Name");
+        l2.setFont(font);
+        add(l2);
+        tf2 = new TextField(30);
+
+        add(tf2);
+        l3 = new Label("Set Password");
+        l3.setFont(font);
+        add(l3);
+        tf3 = new TextField(8);
+        tf3.setEchoChar('*');
+
+        add(tf3);
+        btn1 = new Button("Sign Up");
+        btn1.setFont(font);
+        btn1.setBackground(Color.GREEN);
+        add(btn1);
+        btn1.addActionListener(this);
+        // Window close handler
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        this.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btn1) {
+            String Name = tf1.getText();
+            String father_name = tf2.getText();
+            String password = tf3.getText();
+            if (Name.length() < 7) {
+                JOptionPane.showMessageDialog(null, "Username and fathername size must be minimum 10 characters");
+            } else if (father_name.length() < 7) {
+                JOptionPane.showMessageDialog(null, "fathername size must be minimum 10 characters");
+            } else {
+                for (int i = 0; i < 7; i++) {
+                    char check = Name.charAt(i);
+                    char check1 = father_name.charAt(i);
+                    if (((check < 65 || check > 90) && (check < 97 || check > 122)) && ((check1 < 65 || check1 > 90) && (check1 < 97 || check1 > 122))) {
+                        JOptionPane.showMessageDialog(null, "Enter Valid Username not starting with Number");
+                        return;
+                    }
+                }
+                try {
+                    Connection conn = null;
+                    String url = "jdbc:sqlite:HostelManagement.db";
+                    conn = DriverManager.getConnection(url);
+                    Statement stmt = conn.createStatement();
+                    int pass = password.hashCode();
+                    stmt.execute("CREATE TABLE IF NOT EXISTS Student(ID INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, fathername TEXT, password TEXT NOT NULL)");
+                    String check = "SELECT name FROM Student";
+                    ResultSet rs = stmt.executeQuery(check);
+                    while (rs.next()) {
+                        if (rs.getString("name").trim().equals(Name.trim())) {
+                            JOptionPane.showMessageDialog(null, "Username already exists");
+                        }
+                    }
+                    String query = "INSERT INTO Student (name,fathername,password)VALUES (?,?,?)";
+                    PreparedStatement pstmt = conn.prepareStatement(query);
+                    pstmt.setString(1, Name);
+                    pstmt.setString(2, father_name);
+                    pstmt.setString(3, password);
+
+                    pstmt.executeUpdate();
+                    this.dispose();
+                    new StudentLogin();
+
+
+                } catch (SQLException ex) {
+                    System.out.println("Error: " + ex);
+                }
+            }
+        }
+
+            }
+    public static void main(String[] args) {
+
+        StudentSignUp s = new StudentSignUp();
+    }
+
+
+}
+
+
+
+
+
+
+
