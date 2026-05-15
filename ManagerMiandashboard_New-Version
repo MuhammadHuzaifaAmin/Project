@@ -4,7 +4,7 @@ import java.awt.event.*;
 import javax.swing.BoxLayout;
 
 public class ManagerMainDashboard extends Frame implements ActionListener {
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7;
+    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, logoutBtn;
     Panel sidebar, contentPanel;
     Label l1;
     CardLayout cardLayout;
@@ -19,7 +19,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         this.setLayout(new BorderLayout());
         // sidebar
         sidebar = new Panel();
-        sidebar.setLayout(new GridLayout(1, 7, 10, 10));
+        sidebar.setLayout(new GridLayout(1, 8, 10, 10));
         Font font = new Font("Sansarif", Font.ROMAN_BASELINE, 16);
         // Buttons and its design
         btn1 = new Button("Rooms Section");
@@ -43,6 +43,10 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         btn7 = new Button("Mess Menu");
         btn7.setFont(font);
         btn7.setBackground(Color.YELLOW);
+        logoutBtn = new Button("Logout");
+        logoutBtn.setFont(font);
+        logoutBtn.setBackground(Color.RED);
+        logoutBtn.setForeground(Color.WHITE);
 
         sidebar.add(btn1);
         sidebar.add(btn2);
@@ -51,6 +55,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         sidebar.add(btn5);
         sidebar.add(btn6);
         sidebar.add(btn7);
+        sidebar.add(logoutBtn);
 
         // registering the components
         btn1.addActionListener(this);
@@ -60,6 +65,7 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         btn5.addActionListener(this);
         btn6.addActionListener(this);
         btn7.addActionListener(this);
+        logoutBtn.addActionListener(this);
 
         // adding sidebar to the Frame
         this.add(sidebar, BorderLayout.NORTH);
@@ -69,9 +75,10 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
 
         Panel homePanel;
         Panel viewRequestPanel;
+        Panel roomSectionPanel;
         Panel removeStudentPanel;
         Panel displayStudentPanel;
-        Panel paymentPanel;
+        Panel paymentSectionPanel;
         Panel visitorPanel;
         Panel messMenuPanel;
         Panel complaintPanel;
@@ -89,10 +96,10 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
         // ADDING ALL PANELS TO CARDLAYOUT
         contentPanel.add(homePanel, "HOME");
         // 1
-        RoomSectionPanel roomSectionPanel = new RoomSectionPanel();
+        roomSectionPanel = new RoomSectionPanel();
         contentPanel.add(roomSectionPanel, "Room Section");
 
-        PaymentsDetailsPanel paymentSectionPanel = new PaymentsDetailsPanel();
+        paymentSectionPanel = new PaymentsSectionPanel();
         contentPanel.add(paymentSectionPanel, "PAYMENT SECTION");
         // 2
         viewRequestPanel = new ViewRequestPanel();
@@ -154,6 +161,11 @@ public class ManagerMainDashboard extends Frame implements ActionListener {
 
         else if (e.getSource() == btn7) {
             cardLayout.show(contentPanel, "MESS");
+        }
+
+        else if (e.getSource() == logoutBtn) {
+            this.dispose();
+            new first();
         }
     }
 
@@ -717,12 +729,12 @@ class VisitorPanel extends Panel {
 }
 
 // for it and added buttons to switch between them.
-class PaymentsDetailsPanel extends Panel implements ActionListener {
+class PaymentsSectionPanel extends Panel implements ActionListener {
     CardLayout paymentsCard;
     Panel paymentContent;
     Button addButton, receiveButton, detailsButton;
 
-    public PaymentsDetailsPanel() {
+    public PaymentsSectionPanel() {
         setLayout(new BorderLayout());
 
         // Top bar with 3 buttons
